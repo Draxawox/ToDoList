@@ -10,6 +10,7 @@ let $popupInput;
 let $addPopupBtn;
 let $closeTodoBtn;
 let $idNumber = 0;
+let $allTasks;
 
 const main = () => {
     prepareDOMElements();
@@ -21,12 +22,12 @@ const prepareDOMElements = () => {
     $alertInfo = document.querySelector('.alertInfo');
     $addBtn = document.querySelector('.addBtn');
     $ulList = document.querySelector('.todoList ul');
-
     $popup = document.querySelector('.popup');
     $popupInfo = document.querySelector('.popupInfo');
     $popupInput = document.querySelector('.popupInput');
     $addPopupBtn = document.querySelector('.accept');
     $closeTodoBtn = document.querySelector('.cancel');
+    $allTasks = $ulList.getElementsByTagName('li');
 };
 
 const prepareDOMEvents = () => {
@@ -34,6 +35,7 @@ const prepareDOMEvents = () => {
     $ulList.addEventListener('click', checkClick);
     $closeTodoBtn.addEventListener('click', closePopup);
     $addPopupBtn.addEventListener('click', changeTodo);
+    $todoInput.addEventListener('keyup', enterCheck);
 };
 
 document.addEventListener('DOMContentLoaded', main);
@@ -50,6 +52,12 @@ const addNewTask = () => {
         createToolsArea();
     } else {
         $alertInfo.innerText = 'Wpisz treść zadania!';
+    }
+};
+
+const enterCheck = () => {
+    if(event.keyCode === 13) {
+        addNewTask();
     }
 };
 
@@ -82,7 +90,7 @@ const checkClick = (e) => {
     } else if (e.target.closest('button').className === 'edit') {
             editTask(e);
     } else if (e.target.closest('button').className === 'delete') {
-
+        deleteTask(e);
     } 
 };
 
@@ -108,4 +116,12 @@ const closePopup = () => {
     $popup.style.display = 'none';
 };
 
+const deleteTask = (e) => {
+    const deleteTodo = e.target.closest('li');
+    deleteTodo.remove();
+
+    if ($allTasks.length === 0) {
+        $alertInfo.innerText = 'Brak zadań na liście';
+    };
+}
 document.addEventListener('DOMContentLoaded', main);
